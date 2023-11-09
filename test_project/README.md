@@ -1,6 +1,14 @@
 # test_project
 
-A new Flutter project.
+To run this app
+
+● Clone the repository and run following commands in terminal.
+● flutter pub get
+● flutter build apk
+● By connecting mobile to the laptop the app can be installed and it will run.
+● There is a basic home page which contains current location, search bar, category filters and nearby restaurants based on the current location.
+● There is list of restaurants with their dinstance from current location
+● It uses Geolocater for getting current location and also cubit for state management.
 
 ## Getting Started
 
