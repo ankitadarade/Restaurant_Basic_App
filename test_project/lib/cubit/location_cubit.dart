@@ -18,7 +18,7 @@ class LocationCubit extends Cubit<LocationState> {
     }
   }
 
-  // Add this function to update the location without fetching it again
+ 
   void updateLocation(Position position) {
     emit(LocationLoaded(position: position));
   }

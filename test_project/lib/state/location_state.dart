@@ -1,4 +1,3 @@
-// location_state.dart
 import 'package:equatable/equatable.dart';
 import 'package:geolocator/geolocator.dart';
 
