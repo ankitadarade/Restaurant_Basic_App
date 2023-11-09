@@ -8,7 +8,7 @@ To run this app
 ● flutter build apk                                                                                                                                                 
 ● By connecting mobile to the laptop the app can be installed and it will run.                                                                                      
 ● There is a basic home page which contains current location, search bar, category filters and nearby restaurants based on the current location.                    
-● There is list of restaurants with their dinstance from current location.                                                                                          
+● There is list of restaurants with their distance from current location.                                                                                           
 ● It uses Geolocater for getting current location and also cubit for state management.                                                                              
 
 
