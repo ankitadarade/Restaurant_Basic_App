@@ -35,7 +35,7 @@ class CategoryFiltersWidget extends StatelessWidget {
                         .toggleCategory(index);
                   },
                   child: Container(
-                    width: isSelected ? w * 0.25 : w * 0.2,
+                    width: isSelected ? w * 0.27 : w * 0.2,
                     margin: const EdgeInsets.symmetric(horizontal: 8),
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
@@ -46,12 +46,7 @@ class CategoryFiltersWidget extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        isSelected
-                            ? Icon(category.icon, color: Colors.white)
-                            : Icon(
-                                category.icon,
-                                color: Colors.black,
-                              ),
+                        category.img,
                         if (isSelected) const SizedBox(width: 10),
                         if (isSelected)
                           Text(category.name,
@@ -72,16 +67,38 @@ class CategoryFiltersWidget extends StatelessWidget {
 class Category {
   final String name;
   final IconData icon;
+  final Image img;
 
-  Category({required this.name, required this.icon});
+  Category({required this.name, required this.icon, required this.img});
 }
 
 final List<Category> categories = [
-  Category(name: 'All', icon: Icons.category),
-  Category(name: 'Pizza', icon: FontAwesomeIcons.pizzaSlice),
-  Category(name: 'Burger', icon: FontAwesomeIcons.burger),
-  Category(name: 'Vegies', icon: FontAwesomeIcons.carrot),
-  Category(name: 'Bread', icon: FontAwesomeIcons.breadSlice),
-  Category(name: 'Salads', icon: FontAwesomeIcons.leaf),
-  Category(name: 'Fruits', icon: FontAwesomeIcons.appleWhole),
+  Category(
+      name: 'All',
+      icon: Icons.category,
+      img: Image(image: AssetImage("assets/salad1.png"))),
+  Category(
+      name: 'Pizza',
+      icon: FontAwesomeIcons.pizzaSlice,
+      img: Image(image: AssetImage("assets/pizza1.png"))),
+  Category(
+      name: 'Burger',
+      icon: FontAwesomeIcons.burger,
+      img: Image(image: AssetImage("assets/burger1.png"))),
+  Category(
+      name: 'NonVeg',
+      icon: FontAwesomeIcons.carrot,
+      img: Image(image: AssetImage("assets/roasted-chicken.png"))),
+  Category(
+      name: 'Bread',
+      icon: FontAwesomeIcons.breadSlice,
+      img: Image(image: AssetImage("assets/burger1.png"))),
+  Category(
+      name: 'Vegies',
+      icon: FontAwesomeIcons.leaf,
+      img: Image(image: AssetImage("assets/pizza1.png"))),
+  Category(
+      name: 'Fruits',
+      icon: FontAwesomeIcons.appleWhole,
+      img: Image(image: AssetImage("assets/salad1.png"))),
 ];

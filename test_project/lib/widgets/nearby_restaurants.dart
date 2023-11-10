@@ -1,82 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_project/widgets/card_design.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 
-class NearbyRestaurantsWidget extends StatefulWidget {
-  final double latitude;
-  final double longitude;
-
-  const NearbyRestaurantsWidget({
-    Key? key,
-    required this.latitude,
-    required this.longitude,
-  }) : super(key: key);
-
-  @override
-  _NearbyRestaurantsWidgetState createState() =>
-      _NearbyRestaurantsWidgetState();
-}
-
-class _NearbyRestaurantsWidgetState extends State<NearbyRestaurantsWidget> {
-  List<Restaurant> restaurants = [];
-  List<Restaurant> filteredRestaurants = [];
-
-  TextEditingController searchController = TextEditingController();
-
-  @override
-  void didUpdateWidget(covariant NearbyRestaurantsWidget oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.latitude != oldWidget.latitude ||
-        widget.longitude != oldWidget.longitude) {
-      fetchRestaurants();
-    }
-  }
-
-  Future<void> fetchRestaurants() async {
-    final baseUrl = 'https://theoptimiz.com/restro/public/api/';
-    final endPoint = 'get_resturants';
-
-    final response = await http.post(
-      Uri.parse('$baseUrl$endPoint'),
-      body: jsonEncode({"lat": widget.latitude, "lng": widget.longitude}),
-      headers: {'Content-Type': 'application/json'},
-    );
-
-    if (response.statusCode == 200) {
-      final Map<String, dynamic> parsedResponse = json.decode(response.body);
-      final List<dynamic> restaurantList = parsedResponse['data'];
-
-      setState(() {
-        restaurants =
-            restaurantList.map((json) => Restaurant.fromJson(json)).toList();
-      });
-    } else {
-      SnackBar(content: Text('Failed to load restaurants'));
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    var h = MediaQuery.of(context).size.height;
-    
-   return Container(
-      height: h / 1.614,
-      child: ListView.builder(
-        shrinkWrap: true,
-        itemCount: restaurants.length,
-        itemBuilder: (context, index) {
-          final restaurant = restaurants[index];
-          return CardDesign(
-            name: restaurant.name,
-            imageUrl: restaurant.primaryImage,
-            distance: restaurant.distance,
-          );
-        },
-      ),
-    );
-  }
-}
+import '../cubit/restaurant_cubit.dart';
+import '../state/restaurant_state.dart';
 
 class Restaurant {
   final int id;
@@ -106,6 +33,56 @@ class Restaurant {
       discount: json['discount'] ?? 0,
       primaryImage: json['primary_image'] ?? '',
       distance: json['distance'] ?? 0.0,
+    );
+  }
+}
+
+class NearbyRestaurantsWidget extends StatelessWidget {
+  final double latitude;
+  final double longitude;
+
+  NearbyRestaurantsWidget({
+    Key? key,
+    required this.latitude,
+    required this.longitude,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    var h = MediaQuery.of(context).size.height;
+
+    return BlocProvider(
+      create: (context) =>
+          RestaurantCubit()..fetchRestaurants(latitude, longitude),
+      child: BlocBuilder<RestaurantCubit, RestaurantState>(
+        builder: (context, state) {
+          if (state.isLoading) {
+            return Center(child: CircularProgressIndicator());
+          } else if (state.isError) {
+            return Center(child: Text('Failed to load restaurants'));
+          } else {
+            final restaurants = state.restaurants;
+            // print('Number of restaurants: ${restaurants.length}');
+            return Container(
+              height: h / 1.614,
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: restaurants.length,
+                itemBuilder: (context, index) {
+                  final restaurant = restaurants[index];
+                  return CardDesign(
+                    name: restaurant.name,
+                    imageUrl: restaurant.primaryImage,
+                    distance: restaurant.distance,
+                    rating: restaurant.rating,
+                    discount: restaurant.discount,
+                  );
+                },
+              ),
+            );
+          }
+        },
+      ),
     );
   }
 }
